@@ -5,9 +5,9 @@ library(shiny)
 library(bslib)
 library(tidyverse)
 library(tidymodels)
-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-load(file = 'activity_tracker.Rda')
-
+#setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+#load(file = 'activity_tracker.Rda')
+#rsconnect::writeManifest()
 #ui
 ui <- fluidPage(
   actionButton("predict", "Calcuate Probable Diagnosis"),
