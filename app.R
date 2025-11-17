@@ -6,7 +6,7 @@ library(bslib)
 library(tidyverse)
 library(tidymodels)
 #setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-#load(file = 'activity_tracker.Rda')
+load(file = 'activity_tracker.Rda')
 #rsconnect::writeManifest()
 #ui
 ui <- fluidPage(
