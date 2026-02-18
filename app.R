@@ -6,8 +6,7 @@ library(bslib)
 library(tidyverse)
 library(tidymodels)
 #setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-load(file = 'activity_tracker.Rda')
-load(file = 'IBSvIBD.Rda')
+load(file = 'IBDtracker/activity_tracker.Rda')
 #rsconnect::writeManifest()
 
 #activity tracker
@@ -54,57 +53,6 @@ ui = tagList(
   textOutput("trackactprob"),
   textOutput("trackremprob"),
   textOutput("trackbestprob")
-  
-),
-),
-
-
-
-
-
-
-#IBSvIBD
-
-  #ui
-tabPanel("IBS vs IBD diagnosis",
-         fluidPage(
-    actionButton("ibs_predict", "Calcuate Probable Diagnosis"),
-    numericInput('neut',
-                 label = 'Neutrophils',
-                 value = 0
-    ),
-    numericInput('lymph',
-                 label = 'Lymphocytes',
-                 value = 0
-    ),
-    numericInput('mono',
-                 label = 'Monocytes',
-                 value = 0
-    ),
-    numericInput('eosin',
-                 label = 'Eosinophils',
-                 value = 0
-    ),
-    numericInput('baso',
-                 label = 'Basophils',
-                 value = 0
-    ),
-    numericInput('hb',
-                 label = 'Hemoglobin',
-                 value = 0
-    ),
-    numericInput('plt',
-                 label = 'Platelets',
-                 value = 0
-    ),
-    numericInput('age',
-                 label = 'Age',
-                 value = 0
-    ),
-    textOutput("ibsactprob"),
-    textOutput("ibsremprob"),
-    textOutput("ibsbestprob")
-    
   )
 )
 )
@@ -159,48 +107,7 @@ tabPanel("IBS vs IBD diagnosis",
     
 
     
-    ibs_patient_values <- eventReactive(input$ibs_predict, {
-      as.tibble(data.frame(
-        status = NA,
-        neut = (((input$neut)-5.651213)/2.81442),
-        lymph = (((input$lymph)-2.091166)/0.9486037),
-        mono = (((input$mono)-0.6273751)/0.2845463),
-        eosin = (((input$eosin)-0.2078273)/0.2491543),
-        baso = (((input$baso)-0.03772737)/0.03768921),
-        age = (((input$age)-39.52566)/18.25781),
-        hb = (((input$hb)-128.8111)/18.20674),
-        plt = (((input$plt)-299.2203)/117.2642)
-      ))
-    })
-    
-    
-    ibs_predicted <- eventReactive(input$ibs_predict, {
-      ibs_patient_values <- ibs_patient_values()
-      predict(IBSvIBD_model, new_data = ibs_patient_values, type = "prob")  
-    })
-    ibs_pred_act <- eventReactive(input$ibs_predict, {
-      ibs_predicted <- ibs_predicted()
-      ibs_predicted[1, 2]
-    })
-    ibs_pred_rem <- eventReactive(input$ibs_predict, {
-      ibs_predicted <- ibs_predicted()
-      ibs_predicted[1, 1]
-    })
-    ibs_pred_best <- eventReactive(input$ibs_predict, {
-      ibs_pred_act <- ibs_pred_act()
-      ibs_pred_rem <- ibs_pred_rem()
-      ifelse(ibs_pred_act>ibs_pred_rem, "IBS", "IBD")
-    }) 
-    output$ibsactprob  <- renderText({
-      paste("probability of IBS", ibs_pred_act())
-    })
-    
-    output$ibsremprob <- renderText({
-      paste("probability of IBD", ibs_pred_rem())
-    })
-    output$ibsbestprob <- renderText({
-      paste("The patient most likely has", ibs_pred_best())
-    })
+   
     
   }
   
@@ -208,4 +115,5 @@ tabPanel("IBS vs IBD diagnosis",
 
 
 #app
+
 shinyApp(ui = ui, server = server)
