@@ -6,7 +6,7 @@ library(bslib)
 library(tidyverse)
 library(tidymodels)
 #setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-load(file = 'IBDtracker/activity_tracker.Rda')
+load(file = 'activity_tracker.Rda')
 #rsconnect::writeManifest()
 
 #activity tracker
@@ -117,3 +117,4 @@ ui = tagList(
 #app
 
 shinyApp(ui = ui, server = server)
+
